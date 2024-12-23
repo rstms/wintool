@@ -32,6 +32,7 @@ import (
 var Toolkit embed.FS
 var KeepTempDirs bool
 var Debug bool
+var Verison string = "0.0.6"
 
 var cfgFile string
 
@@ -39,7 +40,8 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "wintool",
 	Short: "windows desktop management tool",
-	Long: `
+	Long: "wintool v" Version + `
+
 Utility providing miscelaneous functions for management of the windows desktop.
 `,
 }
