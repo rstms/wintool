@@ -28,8 +28,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//go:embed toolkit
+//go:embed toolkit/*
 var Toolkit embed.FS
+var KeepTempDirs bool
 
 var cfgFile string
 
@@ -50,5 +51,5 @@ func Execute() {
 }
 
 func init() {
-	//installCmd.PersistentFlags().StringVarP(&linksRoot, "service-dir", "S", "/etc/service", "services link directory")
+	rootCmd.PersistentFlags().BoolVarP(&KeepTempDirs, "keep", "k", false, "keep temp directories")
 }

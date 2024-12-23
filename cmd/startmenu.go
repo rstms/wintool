@@ -42,11 +42,18 @@ filters the output by presence of FILENAME
 
 		tempDir, err := os.MkdirTemp("", "startmenu-")
 		cobra.CheckErr(err)
-		defer os.RemoveAll(tempDir)
+		if KeepTempDirs {
+			fmt.Println(tempDir)
+		} else {
+			defer os.RemoveAll(tempDir)
+		}
 
 		filename := filepath.Join(tempDir, "links")
-		_, _, _, err = RunTool("shman.exe", "/stab", filename)
+		_, stdout, stderr, err := RunTool("shman.exe", "/stab", filename)
 		cobra.CheckErr(err)
+
+		fmt.Printf("stdout: %s\n", stdout)
+		fmt.Printf("stderr: %s\n", stderr)
 
 		file, err := os.Open(filename)
 		cobra.CheckErr(err)

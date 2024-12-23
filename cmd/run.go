@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -53,7 +54,11 @@ func RunTool(command string, args ...string) (int, string, string, error) {
 	if err != nil {
 		return -1, "", "", err
 	}
-	defer os.RemoveAll(tempDir)
+	if KeepTempDirs {
+		fmt.Println(tempDir)
+	} else {
+		defer os.RemoveAll(tempDir)
+	}
 
 	tmpCommand := filepath.Join(tempDir, command)
 	err = copyEmbeddedFile(command, tmpCommand)
