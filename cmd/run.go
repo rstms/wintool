@@ -24,12 +24,16 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
 
 func Run(command string, args ...string) (int, string, string, error) {
+	if Debug {
+		log.Printf("Run: %s %v\n", command, args)
+	}
 	cmd := exec.Command(command, args...)
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
@@ -44,6 +48,12 @@ func Run(command string, args ...string) (int, string, string, error) {
 		default:
 			exitCode = -1
 		}
+	}
+	if Debug {
+		log.Printf("exitCode=%d\n", exitCode)
+		log.Printf("stdout=%s\n", stdout.String())
+		log.Printf("stderr=%s\n", stderr.String())
+		log.Printf("err=%v\n", err)
 	}
 	return exitCode, stdout.String(), stderr.String(), err
 }
@@ -69,7 +79,11 @@ func RunTool(command string, args ...string) (int, string, string, error) {
 }
 
 func copyEmbeddedFile(src, dst string) error {
-	data, err := Toolkit.ReadFile(filepath.Join("toolkit", src))
+	srcPath := filepath.Join("toolkit", src)
+	if Debug {
+		log.Printf("embedded src: %s\n", srcPath)
+	}
+	data, err := Toolkit.ReadFile(srcPath)
 	if err != nil {
 		return err
 	}

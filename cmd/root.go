@@ -28,9 +28,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//go:embed toolkit/*
+//go:embed toolkit
 var Toolkit embed.FS
 var KeepTempDirs bool
+var Debug bool
 
 var cfgFile string
 
@@ -52,4 +53,5 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&KeepTempDirs, "keep", "k", false, "keep temp directories")
+	rootCmd.PersistentFlags().BoolVarP(&Debug, "debug", "d", false, "enable debug output")
 }
