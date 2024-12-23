@@ -31,6 +31,9 @@ import (
 	"strings"
 )
 
+var outputAll bool
+var outputField string
+
 var startmenuCmd = &cobra.Command{
 	Use:   "startmenu [FILENAME]",
 	Short: "output start menu configuration",
@@ -62,13 +65,43 @@ filters the output by presence of FILENAME
 		for scanner.Scan() {
 			line := scanner.Text()
 			if len(args) < 1 || strings.Index(line, args[0]) != -1 {
-				fmt.Println(line)
+				formatted, err := formatOutput(line)
+				cobra.CheckErr(err)
+				fmt.Println(formatted)
+				if !outputAll {
+					break
+				}
 			}
 		}
 		cobra.CheckErr(scanner.Err())
 	},
 }
 
+func formatOutput(line string) (string, error) {
+	fields := strings.Split(line, "\t")
+	record := make(map[string]string)
+	record["name"] = fields[0]
+	record["broken"] = fields[1]
+	record["exe"] = fields[2]
+	record["args"] = fields[3]
+	record["dir"] = fields[4]
+	record["window"] = fields[5]
+	record["hotkey"] = fields[6]
+	record["comment"] = fields[7]
+	record["location"] = fields[8]
+	record["modified"] = fields[9]
+	record["icon"] = fields[10]
+	record["shortcut"] = fields[11]
+
+	field, ok := record[outputField]
+	if ok {
+		return field, nil
+	}
+	return fmt.Sprintf("%+v", record), nil
+}
+
 func init() {
+	startmenuCmd.Flags().BoolVarP(&outputAll, "all", "a", false, "output all matches")
+	startmenuCmd.Flags().StringVarP(&outputField, "field", "f", "", "single field")
 	rootCmd.AddCommand(startmenuCmd)
 }
