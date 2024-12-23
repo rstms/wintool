@@ -25,6 +25,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,17 +44,16 @@ filters the output by presence of FILENAME
 		tempDir, err := os.MkdirTemp("", "startmenu-")
 		cobra.CheckErr(err)
 		if KeepTempDirs {
-			fmt.Println(tempDir)
+			if Debug {
+				log.Printf("outputDir: %s", tempDir)
+			}
 		} else {
 			defer os.RemoveAll(tempDir)
 		}
 
 		filename := filepath.Join(tempDir, "links")
-		_, stdout, stderr, err := RunTool("shman.exe", "/stab", filename)
+		_, _, _, err = RunTool("shman.exe", "/stab", filename)
 		cobra.CheckErr(err)
-
-		fmt.Printf("stdout: %s\n", stdout)
-		fmt.Printf("stderr: %s\n", stderr)
 
 		file, err := os.Open(filename)
 		cobra.CheckErr(err)

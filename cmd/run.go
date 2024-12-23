@@ -82,6 +82,7 @@ func copyEmbeddedFile(src, dst string) error {
 	srcPath := filepath.Join("toolkit", src)
 	if Debug {
 		log.Printf("embedded src: %s\n", srcPath)
+		log.Printf("embedded dst: %s\n", dst)
 	}
 	data, err := Toolkit.ReadFile(srcPath)
 	if err != nil {
