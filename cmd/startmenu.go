@@ -33,6 +33,7 @@ import (
 
 var outputAll bool
 var outputField string
+var outputFile string
 
 var startmenuCmd = &cobra.Command{
 	Use:   "startmenu [FILENAME]",
@@ -61,13 +62,21 @@ filters the output by presence of FILENAME
 		file, err := os.Open(filename)
 		cobra.CheckErr(err)
 
+		oFile := os.Stdout
+
+		if outputFile != "" {
+			oFile, err = os.Create(outputFile)
+			cobra.CheckErr(err)
+			defer oFile.Close()
+		}
+
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
 			line := scanner.Text()
 			if len(args) < 1 || strings.Index(line, args[0]) != -1 {
 				formatted, err := formatOutput(line)
 				cobra.CheckErr(err)
-				fmt.Println(formatted)
+				fmt.Fprintln(oFile, formatted)
 				if !outputAll {
 					break
 				}
@@ -107,5 +116,6 @@ func formatOutput(line string) (string, error) {
 func init() {
 	startmenuCmd.Flags().BoolVarP(&outputAll, "all", "a", false, "output all matches")
 	startmenuCmd.Flags().StringVarP(&outputField, "field", "f", "", "single field")
+	startmenuCmd.Flags().StringVarP(&outputFile, "output", "o", "", "output filename")
 	rootCmd.AddCommand(startmenuCmd)
 }
