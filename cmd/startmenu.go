@@ -32,6 +32,7 @@ import (
 )
 
 var outputAll bool
+var outputRaw bool
 var outputField string
 var outputFile string
 
@@ -87,6 +88,9 @@ filters the output by presence of FILENAME
 }
 
 func formatOutput(line string) (string, error) {
+	if outputRaw {
+		return line, nil
+	}
 	fields := strings.Split(line, "\t")
 	record := make(map[string]string)
 	record["name"] = fields[0]
@@ -115,6 +119,7 @@ func formatOutput(line string) (string, error) {
 
 func init() {
 	startmenuCmd.Flags().BoolVarP(&outputAll, "all", "a", false, "output all matches")
+	startmenuCmd.Flags().BoolVarP(&outputRaw, "raw", "r", false, "disable output formatting")
 	startmenuCmd.Flags().StringVarP(&outputField, "field", "f", "", "single field")
 	startmenuCmd.Flags().StringVarP(&outputFile, "output", "o", "", "output filename")
 	rootCmd.AddCommand(startmenuCmd)
