@@ -26,7 +26,7 @@ test:
 	fix -- go test -failfast -v .
 	fix -- go test -failfast -v ./...
 
-release:
+release: make
 	@$(gitclean) || { [ -n "$(dirty)" ] && echo "allowing dirty release"; }
 	@$(if $(update),gh release delete -y v$(version),)
 	gh release create v$(version) --notes "v$(version)"
