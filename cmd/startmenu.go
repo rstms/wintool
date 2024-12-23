@@ -97,7 +97,11 @@ func formatOutput(line string) (string, error) {
 	if ok {
 		return field, nil
 	}
-	return fmt.Sprintf("%+v", record), nil
+	out := []string{}
+	for k, v := range record {
+		out = append(out, k+": "+v)
+	}
+	return strings.Join(out, "\n"), nil
 }
 
 func init() {
