@@ -32,7 +32,7 @@ import (
 var Toolkit embed.FS
 var KeepTempDirs bool
 var Debug bool
-var Version string = "0.0.13"
+var Version string = "0.0.14"
 
 var cfgFile string
 
