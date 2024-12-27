@@ -22,6 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -38,7 +39,13 @@ If the git state is clean exit 0, otherwise, exit 1.
 		_, stdout, _, err := Run("git", "status", "--porcelain")
 		cobra.CheckErr(err)
 		if len(stdout) == 0 {
+			if Verbose {
+				fmt.Printf("git status is clean\n")
+			}
 			os.Exit(0)
+		}
+		if Verbose {
+			fmt.Printf("git status is dirty\n")
 		}
 		os.Exit(1)
 	},

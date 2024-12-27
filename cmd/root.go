@@ -32,6 +32,8 @@ import (
 var Toolkit embed.FS
 var KeepTempDirs bool
 var Debug bool
+var Verbose bool
+var Quiet bool
 var Version string = "0.0.14"
 
 var cfgFile string
@@ -53,4 +55,6 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&KeepTempDirs, "keep", "k", false, "keep temp directories")
 	rootCmd.PersistentFlags().BoolVarP(&Debug, "debug", "d", false, "enable debug output")
+	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "be chatty")
+	rootCmd.PersistentFlags().BoolVarP(&Quiet, "quiet", "q", false, "be taciturn")
 }
