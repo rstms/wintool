@@ -34,7 +34,7 @@ var KeepTempDirs bool
 var Debug bool
 var Verbose bool
 var Quiet bool
-var Version string = "0.0.15"
+var Version string = "0.0.16"
 
 var cfgFile string
 
